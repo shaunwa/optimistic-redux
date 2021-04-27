@@ -11,7 +11,7 @@ export const TodoListItem = ({ todo }) => {
                 ? <p>Completed!</p>
                 : <p>Incomplete</p>}
             <button onClick={() => dispatch(markTodoCompleted(todo.id))}>Complete</button>
-            <button onClick={() => dispatch(deleteTodo(todo.id))}>Delete</button>
+            <button onClick={() => dispatch(deleteTodo(todo))}>Delete</button>
         </div>
     );
 }

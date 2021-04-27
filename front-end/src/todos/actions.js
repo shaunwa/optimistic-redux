@@ -34,4 +34,4 @@ export const markTodoCompletedFailure = (todoId, errorMessage) => ({ type: MARK_
 
 export const deleteTodoLoading = (todoId) => ({ type: DELETE_TODO_LOADING, payload: todoId });
 export const deleteTodoSuccess = (todoId) => ({ type: DELETE_TODO_SUCCESS, payload: todoId });
-export const deleteTodoFailure = (todoId, errorMessage) => ({ type: DELETE_TODO_FAILURE, payload: { todoId, errorMessage } });
+export const deleteTodoFailure = (todo, errorMessage) => ({ type: DELETE_TODO_FAILURE, payload: { todo, errorMessage } });

@@ -33,10 +33,11 @@ export const createTodo = (newTodoText) =>
     async (dispatch) => {
         dispatch(createTodoLoading(newTodoText));
         try {
-            const response = await axios.post('/todos', { text: newTodoText, isComplete: false });
+            const response = await axios.post('/todos', { text: newTodoText, isCompleted: false });
             const newTodo = response.data;
             dispatch(createTodoSuccess(newTodo));
         } catch (error) {
+            alert('Sorry, couldn\'t create that todo, please try again');
             dispatch(createTodoFailure(newTodoText, error.message));
         }
     }
@@ -49,17 +50,19 @@ export const markTodoCompleted = (todoId) =>
             const updatedTodo = response.data;
             dispatch(markTodoCompletedSuccess(updatedTodo));
         } catch (error) {
+            alert('Sorry, couldn\'t mark that todo as completed, please try again');
             dispatch(markTodoCompletedFailure(todoId, error.message));
         }
     }
 
-export const deleteTodo = (todoId) =>
+export const deleteTodo = (todo) =>
     async (dispatch) => {
-        dispatch(deleteTodoLoading(todoId));
+        dispatch(deleteTodoLoading(todo.id));
         try {
-            await axios.delete(`/todos/${todoId}`);
-            dispatch(deleteTodoSuccess(todoId));
+            await axios.delete(`/todos/${todo.id}`);
+            dispatch(deleteTodoSuccess(todo.id));
         } catch (error) {
-            dispatch(deleteTodoFailure(todoId, error.message));
+            alert('Sorry, couldn\'t delete that todo, please try again');
+            dispatch(deleteTodoFailure(todo, error.message));
         }
     }

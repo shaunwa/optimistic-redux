@@ -10,7 +10,7 @@ let todos = [];
 
 // We'll use this to slow down the server endpoints and really
 // see the difference between optimistic and realistic ui
-// app.use((req, res, next) => setTimeout(() => next(), 2000));
+app.use((req, res, next) => setTimeout(() => next(), 2000));
 
 // For loading all the todos
 app.get('/todos', (req, res) => {
@@ -38,9 +38,10 @@ app.put('/todos/:todoId', (req, res) => {
 
 // Delete a todo
 app.delete('/todos/:todoId', (req, res) => {
-    const { todoId } = req.params;
-    todos = todos.filter(todo => todo.id !== todoId);
-    res.sendStatus(200);
+    res.sendStatus(500);
+    // const { todoId } = req.params;
+    // todos = todos.filter(todo => todo.id !== todoId);
+    // res.sendStatus(200);
 });
 
 app.listen(8080, () => console.log('Server is listening on port 8080'));

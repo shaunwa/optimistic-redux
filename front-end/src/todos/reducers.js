@@ -35,7 +35,9 @@ export const todosErrorReducer = (state = '', action) => {
 }
 
 /*
-    
+    This is the optimistic todos reducer. Notice how
+    it treats most "loading" events the same way that the
+    non-optimistic reducer treats "success" events
 */
 export const todosReducer = (state = [], action) => {
     switch (action.type) {
@@ -43,22 +45,44 @@ export const todosReducer = (state = [], action) => {
         const todos = action.payload;
         return todos;
     }
+    case CREATE_TODO_LOADING: {
+        const newTodoText = action.payload;
+        return state.concat({ id: 'new', text: newTodoText, isCompleted: false });
+    }
     case CREATE_TODO_SUCCESS: {
         const newTodo = action.payload;
-        return state.concat(newTodo);
+        return state.filter(todo => todo.id !== 'new').concat(newTodo);
     }
-    case MARK_TODO_COMPLETED_SUCCESS: {
-        const updatedTodo = action.payload;
+    case CREATE_TODO_FAILURE: {
+        return state.filter(todo => todo.id !== 'new');
+    }
+    case MARK_TODO_COMPLETED_LOADING: {
+        const todoId = action.payload;
         // This is just a way of replacing the old todo with the updated "completed" version
         return state.map(todo => {
-            if (todo.id === updatedTodo.id) return updatedTodo;
+            if (todo.id === todoId) return { ...todo, isCompleted: true };
             return todo;
         });
     }
-    case DELETE_TODO_SUCCESS: {
+    case MARK_TODO_COMPLETED_FAILURE: {
+        const todoId = action.payload.todoId;
+        // This is just a way of replacing the old todo with the updated "completed" version
+        return state.map(todo => {
+            if (todo.id === todoId) return { ...todo, isCompleted: false };
+            return todo;
+        });
+    }
+    case DELETE_TODO_LOADING: {
         const deletedTodoId = action.payload;
         // This is a way of removing the deleted todo from the store
         return state.filter(todo => todo.id !== deletedTodoId);
+    }
+    case DELETE_TODO_FAILURE: {
+        // This one's a little tricky, we have to
+        // replace the deleted todo, which requires us to modify
+        // the action and thunk
+        const todo = action.payload.todo;
+        return state.concat(todo);
     }
     default:
         return state;
